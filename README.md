@@ -87,7 +87,7 @@ NaiveProxy padding; поэтому NaiveProxy не добавляется в Cla
 ## Домашняя схема
 
 ```mermaid
-flowchart LR
+flowchart TB
     A[Клиент 2,4 ГГц] --> B[Общий bridge MikroTik]
     C[Клиент Ethernet] --> B
     D[Клиент 5 ГГц] --> B
