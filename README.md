@@ -10,38 +10,25 @@
 
 ```mermaid
 flowchart LR
-    DNS[DNS и сертификаты<br/>базовое имя + s1…s15] --> EE[VPS EE<br/>Эстония]
-    DNS --> FR[VPS FR<br/>Париж]
-    DNS --> NL[VPS NL<br/>Амстердам]
-    DNS --> FI[VPS FI<br/>Финляндия]
-    ISP[ISPmanager<br/>HTTPS-подписки] --> PC[Clash / Mihomo]
-    ISP --> PS[Karing / sing-box]
-    ISP --> PH[Happ]
-    ISP --> GW[Домашний proxy-home]
-    PC --> EE
-    PC --> FR
-    PC --> NL
-    PC --> FI
-    PS --> EE
-    PS --> FR
-    PS --> NL
-    PS --> FI
-    PH --> EE
-    PH --> FR
-    PH --> NL
-    PH --> FI
+    DNS[DNS + сертификаты<br/>базовое имя и алиасы s1…s15] --> VPS[Пул VPS<br/>EE / FR / NL / FI]
+    ISP[ISPmanager<br/>HTTPS-подписки] --> CLIENTS[Clash / Karing / Happ]
+    CLIENTS --> VPS
+    ISP --> GW[Домашний proxy-home<br/>отдельный профиль]
     MT[MikroTik<br/>выборочные назначения] --> GW
-    GW --> EE
-    GW --> FI
-    GW --> FR
-    EE -. Trojan cascade .-> FI
-    FR -. Trojan cascade .-> FI
-    NL -. Trojan cascade .-> FI
+    GW --> AUTO[Auto: EE → FI → FR<br/>или ручной выбор]
+    AUTO --> VPS
 ```
 
 Здесь EE/FR/NL/FI — только роли узлов, не их имена в публичном DNS.
 Амстердам сохранён в клиентских профилях и артефактах, но не входит в
 текущую автоматическую цепочку домашнего шлюза.
+
+| Роль VPS | География | Назначение |
+| --- | --- | --- |
+| EE | Эстония | Основные TCP-выходы домашнего шлюза и клиентские профили |
+| FR | Париж | Резерв TCP/UDP и клиентские профили |
+| NL | Амстердам | Сохранён в клиентских профилях; не участвует в текущем Auto шлюза |
+| FI | Финляндия | UDP/Hysteria2, TCP-резервы и конечный узел Trojan Cascade из EE/FR/NL |
 
 ### DNS, TLS и публикация на ISP
 
